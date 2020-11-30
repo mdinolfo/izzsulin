@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/insulinFactor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="160"
+        android:inputType="number"
+        android:text="160"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/carbFactor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="30"
+        android:inputType="number"
+        android:text="30"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/carbLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Carb Factor"
+        app:layout_constraintBaseline_toBaselineOf="@+id/carbFactor"
+        app:layout_constraintStart_toEndOf="@+id/carbFactor" />
+
+    <TextView
+        android:id="@+id/insulinLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Insulin Factor"
+        app:layout_constraintBaseline_toBaselineOf="@+id/insulinFactor"
+        app:layout_constraintEnd_toStartOf="@+id/insulinFactor" />
+
+    <Button
+        android:id="@+id/calcButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:onClick="calculateInsulin"
+        android:text="Calculate!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Blood Sugar"
+        app:layout_constraintBaseline_toBaselineOf="@+id/bloodSugar"
+        app:layout_constraintEnd_toStartOf="@+id/bloodSugar" />
+
+    <EditText
+        android:id="@+id/bloodSugar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="150"
+        android:inputType="number"
+        android:gravity="right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/insulinFactor" />
+
+    <EditText
+        android:id="@+id/carbEaten"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="45"
+        android:inputType="number"
+        android:gravity="right"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carbFactor" />
+
+    <TextView
+        android:id="@+id/carb2Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Carbs Eaten"
+        app:layout_constraintBaseline_toBaselineOf="@+id/carbEaten"
+        app:layout_constraintStart_toEndOf="@+id/carbEaten" />
+
+    <TextView
+        android:id="@+id/results"
+        android:layout_width="0dp"
+        android:layout_height="234dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calcButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>
