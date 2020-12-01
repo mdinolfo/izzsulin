@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
             int newCarbFactor = Integer.parseInt(editText.getText().toString());
 
             if ( carbFactor != newCarbFactor ) {
-                editor.putInt("carbFactor", carbFactor);
+                editor.putInt("carbFactor", newCarbFactor);
                 changesMade = true;
             }
         }
@@ -62,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
             int newInsulinFactor = Integer.parseInt(editText.getText().toString());
 
             if ( insulinFactor != newInsulinFactor ) {
-                editor.putInt("insulinFactor", insulinFactor);
+                editor.putInt("insulinFactor", newInsulinFactor);
                 changesMade = true;
             }
         }
