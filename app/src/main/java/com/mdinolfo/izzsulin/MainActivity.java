@@ -3,10 +3,9 @@ package com.mdinolfo.izzsulin;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -14,10 +13,13 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String myPref = "izzulin_prefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadPreferences();
     }
 
     @Override
@@ -32,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         int id = item.getItemId();
         switch (id) {
-            case R.id.settings:
+            case R.id.preferences:
                 intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                // reload values
+                startActivityForResult(intent,RESULT_FIRST_USER);
                 return true;
             case R.id.help:
                 intent = new Intent(this, AboutActivity.class);
@@ -44,6 +45,28 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK)
+            loadPreferences();
+    }
+
+    private void loadPreferences() {
+        SharedPreferences sp = getSharedPreferences(myPref,0);
+        int carbFactor = sp.getInt("carbFactor",0);
+        int insulinFactor = sp.getInt("insulinFactor",0);
+
+        EditText editText = (EditText) findViewById(R.id.carbFactor);
+        if ( carbFactor > 0 )
+            editText.setText(Integer.toString(carbFactor));
+
+        editText = (EditText) findViewById(R.id.insulinFactor);
+        if ( insulinFactor > 0 )
+            editText.setText(Integer.toString(insulinFactor));
     }
 
     private boolean isEmpty(EditText etText) {

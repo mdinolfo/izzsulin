@@ -16,7 +16,6 @@
         android:gravity="right"
         android:hint="160"
         android:inputType="number"
-        android:text="160"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +29,6 @@
         android:gravity="right"
         android:hint="30"
         android:inputType="number"
-        android:text="30"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
