@@ -12,6 +12,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String myPref = "izzulin_prefs";
 
+    private int carbFactor;
+    private int insulinFactor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +24,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void loadPreferences() {
         SharedPreferences sp = getSharedPreferences(myPref,0);
-        int carbFactor = sp.getInt("carbFactor",0);
-        int insulinFactor = sp.getInt("insulinFactor",0);
+        carbFactor = sp.getInt("carbFactor",0);
+        insulinFactor = sp.getInt("insulinFactor",0);
 
         EditText editText = (EditText) findViewById(R.id.carbFactorSetting);
         if ( carbFactor > 0 )
@@ -41,21 +44,31 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void savePreferences(View view) {
+        boolean changesMade = false;
         SharedPreferences.Editor editor = getSharedPreferences(myPref,0).edit();
 
         EditText editText = (EditText) findViewById(R.id.carbFactorSetting);
         if ( !isEmpty(editText) ) {
-            int carbFactor = Integer.parseInt(editText.getText().toString());
-            editor.putInt("carbFactor",carbFactor);
-            editor.commit();
+            int newCarbFactor = Integer.parseInt(editText.getText().toString());
+
+            if ( carbFactor != newCarbFactor ) {
+                editor.putInt("carbFactor", carbFactor);
+                changesMade = true;
+            }
         }
 
         editText = (EditText) findViewById(R.id.insulinFactorSetting);
         if ( !isEmpty(editText) ) {
-            int insulinFactor = Integer.parseInt(editText.getText().toString());
-            editor.putInt("insulinFactor",insulinFactor);
-            editor.commit();
+            int newInsulinFactor = Integer.parseInt(editText.getText().toString());
+
+            if ( insulinFactor != newInsulinFactor ) {
+                editor.putInt("insulinFactor", insulinFactor);
+                changesMade = true;
+            }
         }
+
+        if ( changesMade )
+            editor.commit();
 
         Intent intent = getIntent();
         setResult(RESULT_OK, intent);
