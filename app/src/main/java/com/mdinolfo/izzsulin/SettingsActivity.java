@@ -14,6 +14,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private int carbFactor;
     private int insulinFactor;
+    private boolean runSetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(myPref,0);
         carbFactor = sp.getInt("carbFactor",0);
         insulinFactor = sp.getInt("insulinFactor",0);
+        runSetup = sp.getBoolean("runSetup", true);
 
         EditText editText = (EditText) findViewById(R.id.carbFactorSetting);
         if ( carbFactor > 0 )
@@ -65,6 +67,11 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.putInt("insulinFactor", newInsulinFactor);
                 changesMade = true;
             }
+        }
+
+        if ( runSetup ) {
+            editor.putBoolean("runSetup", false);
+            changesMade = true;
         }
 
         if ( changesMade )

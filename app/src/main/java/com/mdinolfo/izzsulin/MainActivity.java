@@ -19,7 +19,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadPreferences();
+
+        // debug: uncomment the below line to clear all SharePreferences keys
+        //getSharedPreferences(myPref, 0).edit().clear().commit();
+
+        // open Preferences the first time you run the app
+        SharedPreferences sp = getSharedPreferences(myPref,0);
+        boolean runSetup = sp.getBoolean("runSetup", true);
+
+        if ( runSetup ) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivityForResult(intent,RESULT_FIRST_USER);
+        } else {
+            loadPreferences();
+        }
     }
 
     @Override
@@ -36,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.preferences:
                 intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent,RESULT_FIRST_USER);
+                startActivityForResult(intent, RESULT_FIRST_USER); // passing dummy flag
                 return true;
             case R.id.help:
                 intent = new Intent(this, AboutActivity.class);
