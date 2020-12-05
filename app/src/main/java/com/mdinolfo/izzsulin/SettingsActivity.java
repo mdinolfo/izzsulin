@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -14,7 +15,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private int carbFactor;
     private int insulinFactor;
-    private boolean runSetup;
+    private int bloodTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(myPref,0);
         carbFactor = sp.getInt("carbFactor",0);
         insulinFactor = sp.getInt("insulinFactor",0);
-        runSetup = sp.getBoolean("runSetup", true);
+        bloodTarget = sp.getInt("bloodTarget",0);
 
         EditText editText = (EditText) findViewById(R.id.carbFactorSetting);
         if ( carbFactor > 0 )
@@ -36,6 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.insulinFactorSetting);
         if ( insulinFactor > 0 )
             editText.setText(Integer.toString(insulinFactor));
+
+        editText = (EditText) findViewById(R.id.bloodTargetSetting);
+        if ( bloodTarget > 0 )
+            editText.setText(Integer.toString(bloodTarget));
     }
 
     private boolean isEmpty(EditText etText) {
@@ -55,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if ( carbFactor != newCarbFactor ) {
                 editor.putInt("carbFactor", newCarbFactor);
+                carbFactor = newCarbFactor;
                 changesMade = true;
             }
         }
@@ -65,20 +71,29 @@ public class SettingsActivity extends AppCompatActivity {
 
             if ( insulinFactor != newInsulinFactor ) {
                 editor.putInt("insulinFactor", newInsulinFactor);
+                insulinFactor = newInsulinFactor;
                 changesMade = true;
             }
         }
 
-        if ( runSetup ) {
-            editor.putBoolean("runSetup", false);
-            changesMade = true;
+        editText = (EditText) findViewById(R.id.bloodTargetSetting);
+        if ( !isEmpty(editText) ) {
+            int newBloodTarget = Integer.parseInt(editText.getText().toString());
+
+            if ( bloodTarget != newBloodTarget ) {
+                editor.putInt("bloodTarget", newBloodTarget);
+                bloodTarget = newBloodTarget;
+                changesMade = true;
+            }
         }
 
-        if ( changesMade )
-            editor.commit();
+        if ( bloodTarget > 0 && insulinFactor > 0 && carbFactor > 0 ) {
+            if (changesMade)
+                editor.commit();
 
-        Intent intent = getIntent();
-        setResult(RESULT_OK, intent);
-        finish();
+            Intent intent = getIntent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 }

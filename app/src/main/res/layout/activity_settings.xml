@@ -62,12 +62,43 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:onClick="savePreferences"
         android:text="Save Preferences!"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bloodTargetSetting" />
+
+    <EditText
+        android:id="@+id/bloodTargetSetting"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:gravity="right"
+        app:layout_constraintEnd_toEndOf="@+id/insulinFactorSetting"
         app:layout_constraintTop_toBottomOf="@+id/insulinFactorSetting" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Target Blood Sugar"
+        app:layout_constraintBaseline_toBaselineOf="@+id/bloodTargetSetting"
+        app:layout_constraintEnd_toStartOf="@+id/bloodTargetSetting" />
+
+    <TextView
+        android:id="@+id/settingsErrorMessage"
+        android:layout_width="259dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        android:text="All values must be filled in to continue."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

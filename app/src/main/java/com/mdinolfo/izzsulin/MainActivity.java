@@ -15,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String myPref = "izzulin_prefs";
 
+    private int carbFactor;
+    private int insulinFactor;
+    private int bloodTarget;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,11 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
         // open Preferences the first time you run the app
         SharedPreferences sp = getSharedPreferences(myPref,0);
-        boolean runSetup = sp.getBoolean("runSetup", true);
 
-        if ( runSetup ) {
+        if ( loadPreferences() == false ) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivityForResult(intent,RESULT_FIRST_USER);
+            startActivity(intent);
         } else {
             loadPreferences();
         }
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.preferences:
                 intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, RESULT_FIRST_USER); // passing dummy flag
+                startActivity(intent);
                 return true;
             case R.id.help:
                 intent = new Intent(this, AboutActivity.class);
@@ -60,26 +63,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private boolean loadPreferences() {
+        boolean error = false;
 
-        if (resultCode == RESULT_OK)
-            loadPreferences();
-    }
-
-    private void loadPreferences() {
         SharedPreferences sp = getSharedPreferences(myPref,0);
-        int carbFactor = sp.getInt("carbFactor",0);
-        int insulinFactor = sp.getInt("insulinFactor",0);
+        carbFactor = sp.getInt("carbFactor",0);
+        insulinFactor = sp.getInt("insulinFactor",0);
+        bloodTarget = sp.getInt("bloodTarget",0);
 
-        EditText editText = (EditText) findViewById(R.id.carbFactor);
-        if ( carbFactor > 0 )
-            editText.setText(Integer.toString(carbFactor));
-
-        editText = (EditText) findViewById(R.id.insulinFactor);
-        if ( insulinFactor > 0 )
-            editText.setText(Integer.toString(insulinFactor));
+        return (carbFactor > 0 && insulinFactor > 0 && bloodTarget > 0);
     }
 
     private boolean isEmpty(EditText etText) {
@@ -104,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void calculateInsulin(View view) {
         String message = "";
-        double carbFactor = 0.0;
-        double insulinFactor = 0.0;
         double carbEaten = 0.0;
         double bloodSugar = 0.0;
         boolean ok = true;
@@ -113,15 +103,7 @@ public class MainActivity extends AppCompatActivity {
         //
         // collect input
         //
-        EditText editText = (EditText) findViewById(R.id.carbFactor);
-        if ( !isEmpty(editText) )
-            carbFactor = Double.parseDouble(editText.getText().toString());
-
-        editText = (EditText) findViewById(R.id.insulinFactor);
-        if ( !isEmpty(editText) )
-            insulinFactor = Double.parseDouble(editText.getText().toString());
-
-        editText = (EditText) findViewById(R.id.carbEaten);
+        EditText editText = (EditText) findViewById(R.id.carbEaten);
         if ( !isEmpty(editText) )
             carbEaten = Double.parseDouble(editText.getText().toString());
 
@@ -130,11 +112,21 @@ public class MainActivity extends AppCompatActivity {
             bloodSugar = Double.parseDouble(editText.getText().toString());
 
         //
+        // preferences set?
+        //
+        if ( loadPreferences() == false ) {
+            //TextView textView = findViewById(R.id.settingsErrorMessage);
+            //textView.setText("All values must be filled in to continue.");
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            ok = false;
+        }
+
+        //
         // input error checking
         //
-        if ( Double.compare(carbFactor,0.0) <= 0 || Double.compare(insulinFactor,0.0) <= 0 ||
-             Double.compare(bloodSugar,0.0) <= 0 ) {
-            message = "All of the values must be filled in.\n\nPlease try again.";
+        if ( ok && Double.compare(bloodSugar,0.0) <= 0 ) {
+            message = "Please fill in blood sugar at the minimum.";
             ok = false;
         }
 
@@ -142,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         // emergency action for low insulin
         //
         if (ok && Double.compare(bloodSugar,80.0) <= 0) {
-            message = "Please raise blood sugar before giving insulin.\n";
+            message = "Please raise blood sugar before giving insulin.";
             ok = false;
         }
 
@@ -152,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
         if (ok) {
             double bloodInsulin = 0.0;
             double carbInsulin = round4(carbEaten / carbFactor );
-            if (Double.compare(bloodSugar,180.0) > 0)
-                bloodInsulin = round4((bloodSugar - 150) / insulinFactor);
+            if ( Double.compare(bloodSugar,bloodTarget) > 0 )
+                bloodInsulin = round4((bloodSugar - bloodTarget) / insulinFactor);
             double totalInsulin = round4(carbInsulin + bloodInsulin);
             double roundInsulin = insulinRounding(totalInsulin,bloodInsulin);
             message = "Recommended dose: " + Double.toString(roundInsulin) + " units\n\n";
             message += "Total insulin: " + Double.toString(totalInsulin) + "\n";
             message += "Food insulin: " + Double.toString(carbInsulin) + "\n";
-            message += "Blood sugar insulin: " + Double.toString(bloodInsulin) + "\n";
+            message += "Blood insulin: " + Double.toString(bloodInsulin) + "\n";
         }
 
         TextView textView = findViewById(R.id.results);
