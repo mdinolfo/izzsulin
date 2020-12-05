@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         // input error checking
         //
         if ( Double.compare(carbFactor,0.0) <= 0 || Double.compare(insulinFactor,0.0) <= 0 ||
-             Double.compare(carbEaten,0.0) <= 0 || Double.compare(bloodSugar,0.0) <= 0 ) {
+             Double.compare(bloodSugar,0.0) <= 0 ) {
             message = "All of the values must be filled in.\n\nPlease try again.";
             ok = false;
         }
